@@ -11,4 +11,4 @@ const Providers = ({children}:{children:ReactNode}) => {
         </Provider>
     )
 }
-
+export default Providers;
