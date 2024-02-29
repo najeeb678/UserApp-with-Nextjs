@@ -11,7 +11,6 @@ import { loginSchema } from "../../../schemas/loginSchema";
 import { useRouter } from "next/navigation";
 
 import { postLoginData } from "@/redux/slices/userDetails";
-//import { RootState } from "@/redux/slices/userDetails";
 import { AppThunkDispatch } from "@/redux/slices/userDetails";
 
 const LoginForm = () => {
@@ -19,11 +18,9 @@ const LoginForm = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const Error = useSelector((state: any) => state.app.loginError);
 
-  console.log(Error);
+  
 
-  //const [logInError, setLogInError] = useState<string | null>(Error);
 
-  //console.log(Error);
 
   // states
   const initialValues = {

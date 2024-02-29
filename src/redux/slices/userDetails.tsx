@@ -17,7 +17,7 @@ export const postUserData = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (error.response && error.response.status === 400) {
-        return rejectWithValue("User Already Exist : please login");
+        return rejectWithValue(error.response.data.message);
       }
       throw error;
     }
@@ -37,7 +37,7 @@ export const postLoginData = createAsyncThunk(
     } catch (error: any) {
       if (error.response || error.response.status === 401) {
         // Unauthorized - password doesn't match
-        return rejectWithValue("Password doesn't match");
+        return rejectWithValue(error.response.data.message);
       }
       throw error;
     }

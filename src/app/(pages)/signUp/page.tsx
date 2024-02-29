@@ -22,7 +22,6 @@ const SignUp = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const error = useSelector((state: any) => state.app.signupError);
 
-
   const { handleChange, handleBlur, handleSubmit, touched, values, errors } =
     useFormik({
       initialValues: { name: "", email: "", phone: "", password: "" },
@@ -30,16 +29,10 @@ const SignUp = () => {
       onSubmit: async (values, action) => {
         try {
           await dispatch(postUserData(values));
-          if (!error) {
-            setTimeout(() => {
-              router.push("/home");
-            }, 2000);
-          }
         } catch (err) {
           console.error("Error signing up:", err);
         }
         console.log(values);
-        router.push("/");
       },
     });
 
