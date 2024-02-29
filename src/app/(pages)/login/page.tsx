@@ -18,6 +18,7 @@ const LoginForm = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppThunkDispatch>();
   const Error = useSelector((state: any) => state.app.loginError);
+
   console.log(Error);
 
   //const [logInError, setLogInError] = useState<string | null>(Error);

@@ -16,8 +16,8 @@ export const postUserData = createAsyncThunk(
       );
       return response.data;
     } catch (error: any) {
-      if (error.response.data.message && error.response.status === 400) {
-        throw rejectWithValue("User Already Exist : please login");
+      if (error.response && error.response.status === 400) {
+        return rejectWithValue("User Already Exist : please login");
       }
       throw error;
     }
@@ -43,6 +43,7 @@ export const postLoginData = createAsyncThunk(
     }
   }
 );
+
 export interface loginData {
   email: string;
   password: string;
@@ -55,11 +56,10 @@ export interface UserData {
   phone: string;
 }
 export interface UserDetailState {
-
   users: UserData[];
   loading: boolean;
-  loginError: string | null;
-  signupError: string | null;
+  loginError: {} | string | null;
+  signupError: {} | string | null;
   token: string | null;
 }
 const initialState: UserDetailState = {
@@ -87,7 +87,7 @@ const userDetailSlice = createSlice({
       })
       .addCase(postUserData.rejected, (state, action) => {
         state.loading = false;
-        state.signupError = action.error.message || "Unknown error";
+        state.signupError = action.payload || "Unknown error";
       })
       .addCase(postLoginData.pending, (state) => {
         state.loading = true;
@@ -100,7 +100,7 @@ const userDetailSlice = createSlice({
       })
       .addCase(postLoginData.rejected, (state, action) => {
         state.loading = false;
-        state.loginError = action.error.message || "Unknown error";
+        state.loginError = action.payload || "Unknown error";
         console.log(action.error.message);
       });
   },

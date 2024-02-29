@@ -22,6 +22,7 @@ const SignUp = () => {
   const dispatch = useDispatch<AppThunkDispatch>();
   const error = useSelector((state: any) => state.app.signupError);
 
+
   const { handleChange, handleBlur, handleSubmit, touched, values, errors } =
     useFormik({
       initialValues: { name: "", email: "", phone: "", password: "" },
