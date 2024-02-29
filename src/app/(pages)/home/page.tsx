@@ -8,6 +8,11 @@ import GlobalButton from "@/components/UI/GlobalButton";
 
 const Home = () => {
   const router = useRouter();
+  const logoutFunction = () => {
+    localStorage.removeItem("token");
+    console.log("logged out");
+    router.push("/");
+  };
   return (
     <Box
       sx={{
@@ -22,8 +27,8 @@ const Home = () => {
         <GlobalButton
           title="Log Out"
           onClick={() => {
-            console.log("logged out");
-            router.push("/login");
+
+            logoutFunction();
           }}
         />
       </Box>

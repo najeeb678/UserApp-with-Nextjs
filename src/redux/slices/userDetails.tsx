@@ -1,9 +1,14 @@
-import { Action, ThunkDispatch, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  Action,
+  ThunkDispatch,
+  createAsyncThunk,
+  createSlice,
+} from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const postUserData = createAsyncThunk(
   "userDetails/signUpData",
-  async (userData:UserData, { rejectWithValue }) => {
+  async (userData: UserData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://e157-116-58-9-130.ngrok-free.app/auth/signup",
@@ -21,15 +26,16 @@ export const postUserData = createAsyncThunk(
 
 export const postLoginData = createAsyncThunk(
   "userDetails/postLoginData",
-  async (loginData:loginData , { rejectWithValue }) => {
+  async (loginData: loginData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         "https://e157-116-58-9-130.ngrok-free.app/auth/signin",
         loginData
       );
+      localStorage.setItem("token", response.data.token);
       return response.data;
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
+      if (error.response || error.response.status === 401) {
         // Unauthorized - password doesn't match
         return rejectWithValue("Password doesn't match");
       }
@@ -37,18 +43,19 @@ export const postLoginData = createAsyncThunk(
     }
   }
 );
-interface loginData {
+export interface loginData {
   email: string;
   password: string;
 }
-interface UserData {
+export interface UserData {
   id?: number;
   name: string;
   email: string;
   password: string;
   phone: string;
 }
-interface UserDetailState {
+export interface UserDetailState {
+
   users: UserData[];
   loading: boolean;
   loginError: string | null;
@@ -75,6 +82,7 @@ const userDetailSlice = createSlice({
       })
       .addCase(postUserData.fulfilled, (state, action) => {
         state.loading = false;
+        state.signupError = null;
         state.users.push(action.payload);
       })
       .addCase(postUserData.rejected, (state, action) => {
@@ -83,19 +91,21 @@ const userDetailSlice = createSlice({
       })
       .addCase(postLoginData.pending, (state) => {
         state.loading = true;
-        state.signupError = null;
+        state.loginError = null;
       })
-      .addCase(postLoginData.fulfilled, (state) => {
+      .addCase(postLoginData.fulfilled, (state, action) => {
         state.loading = false;
-        state.signupError = null;
+        state.loginError = null;
+        state.token = action.payload.token;
       })
       .addCase(postLoginData.rejected, (state, action) => {
         state.loading = false;
         state.loginError = action.error.message || "Unknown error";
+        console.log(action.error.message);
       });
   },
 });
 
 export default userDetailSlice.reducer;
-export type RootState = ReturnType<typeof userDetailSlice.reducer>;
+//export type RootState = ReturnType<typeof userDetailSlice.reducer>;
 export type AppThunkDispatch = ThunkDispatch<UserDetailState, any, Action>;

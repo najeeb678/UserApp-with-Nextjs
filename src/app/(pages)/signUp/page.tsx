@@ -14,13 +14,13 @@ import image from "../../../../public/assets/image.jpg";
 import GlobalInput from "../../../components/UI/GlobalInput";
 import Image from "next/image";
 import { postUserData } from "@/redux/slices/userDetails";
-import { RootState } from "@/redux/slices/userDetails";
+//import { RootState } from "@/redux/slices/userDetails";
 import { AppThunkDispatch } from "@/redux/slices/userDetails";
 
 const SignUp = () => {
   const router = useRouter();
   const dispatch = useDispatch<AppThunkDispatch>();
-  const error = useSelector((state: RootState) => state.signupError);
+  const error = useSelector((state: any) => state.app.signupError);
 
   const { handleChange, handleBlur, handleSubmit, touched, values, errors } =
     useFormik({
@@ -38,7 +38,7 @@ const SignUp = () => {
           console.error("Error signing up:", err);
         }
         console.log(values);
-        router.push("/home");
+        router.push("/");
       },
     });
 
