@@ -1,24 +1,24 @@
 "use client";
 
 import React from "react";
-//import { useNavigate } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 import { useFormik } from "formik";
-//import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import GlobalInput from "../../../components/UI/GlobalInput";
 import GlobalButton from "../../../components/UI/GlobalButton";
 import { loginSchema } from "../../../schemas/loginSchema";
 import { useRouter } from "next/navigation";
 
-//import { postLoginData } from "../Redux/Slices/userDetails";
+import { postLoginData } from "@/redux/slices/userDetails";
+import { RootState } from "@/redux/slices/userDetails";
+import { AppThunkDispatch } from "@/redux/slices/userDetails";
 
 const LoginForm = () => {
   const router = useRouter();
-  // hooks
-  //   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
-  //   const logInError = useSelector((state) => state.userDetails.loginError);
+  const dispatch = useDispatch<AppThunkDispatch>();
+  const logInError = useSelector((state: RootState) => state.loginError);
+
   // console.log(error)
 
   // states
@@ -37,16 +37,16 @@ const LoginForm = () => {
       initialValues: initialValues,
       validationSchema: loginSchema,
       onSubmit: async (values, action) => {
-        //console.log("login");
+        console.log("login");
         console.log(values);
         router.push("/home");
-        // try {
-        //   await dispatch(postLoginData(values));
+        try {
+          await dispatch(postLoginData(values));
 
-        //   navigate("/home");
-        // } catch (err) {
-        //   throw err;
-        // }
+          router.push("/home");
+        } catch (err) {
+          throw err;
+        }
 
         action.resetForm();
       },
@@ -73,7 +73,7 @@ const LoginForm = () => {
         <Typography variant="h4" fontWeight="fontWeightBold" padding={3}>
           Login Page
         </Typography>
-        {/* {logInError && <Typography color="error">{logInError}</Typography>} */}
+        {logInError && <Typography color="error">{logInError}</Typography>}
         <form>
           <GlobalInput
             name="email"
@@ -125,25 +125,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
-// import { Button } from "@mui/material";
-// import { useRouter } from "next/navigation";
-// import React from "react";
-
-// const LoginForm = () => {
-//   const router = useRouter();
-//   return (
-//     <div>
-//       <h1>LogIn</h1>
-//       <Button
-//         onClick={() => {
-//           router.push("/signUp");
-//         }}
-//       >
-//         Go to SignUp
-//       </Button>
-//     </div>
-//   );
-// };
-
-// export default LoginForm;
